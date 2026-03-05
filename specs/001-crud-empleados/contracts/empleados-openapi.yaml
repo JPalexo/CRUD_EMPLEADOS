@@ -1,0 +1,191 @@
+openapi: 3.0.3
+info:
+  title: CRUD Empleados API
+  version: 1.0.0
+  description: API para alta, consulta, actualización y eliminación de empleados.
+servers:
+  - url: http://localhost:8080
+security:
+  - basicAuth: []
+paths:
+  /api/v1/empleados:
+    post:
+      summary: Crear empleado
+      operationId: createEmpleado
+      tags: [Empleados]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmpleadoRequest'
+      responses:
+        '201':
+          description: Empleado creado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmpleadoResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          $ref: '#/components/responses/Conflict'
+    get:
+      summary: Listar empleados
+      operationId: listEmpleados
+      tags: [Empleados]
+      responses:
+        '200':
+          description: Listado de empleados
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EmpleadoResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/v1/empleados/{clave}:
+    parameters:
+      - name: clave
+        in: path
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+    get:
+      summary: Consultar empleado por clave
+      operationId: getEmpleadoByClave
+      tags: [Empleados]
+      responses:
+        '200':
+          description: Empleado encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmpleadoResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      summary: Actualizar empleado por clave
+      operationId: updateEmpleado
+      tags: [Empleados]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmpleadoRequest'
+      responses:
+        '200':
+          description: Empleado actualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmpleadoResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      summary: Eliminar empleado por clave
+      operationId: deleteEmpleado
+      tags: [Empleados]
+      responses:
+        '204':
+          description: Empleado eliminado
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+  schemas:
+    EmpleadoRequest:
+      type: object
+      required: [clave, nombre, direccion, telefono]
+      properties:
+        clave:
+          type: integer
+          minimum: 1
+        nombre:
+          type: string
+          minLength: 1
+          maxLength: 100
+        direccion:
+          type: string
+          minLength: 1
+          maxLength: 100
+        telefono:
+          type: string
+          minLength: 1
+          maxLength: 100
+
+    EmpleadoResponse:
+      type: object
+      required: [clave, nombre, direccion, telefono]
+      properties:
+        clave:
+          type: integer
+        nombre:
+          type: string
+          maxLength: 100
+        direccion:
+          type: string
+          maxLength: 100
+        telefono:
+          type: string
+          maxLength: 100
+
+    ErrorResponse:
+      type: object
+      required: [code, message]
+      properties:
+        code:
+          type: string
+          example: VALIDATION_ERROR
+        message:
+          type: string
+          example: Campo nombre excede longitud máxima de 100
+        details:
+          type: array
+          items:
+            type: string
+
+  responses:
+    BadRequest:
+      description: Solicitud inválida
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Credenciales inválidas o ausentes
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Conflict:
+      description: Clave duplicada
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: Empleado no encontrado
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'

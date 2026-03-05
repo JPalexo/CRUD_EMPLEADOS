@@ -1,0 +1,29 @@
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/empleados}
+    username: ${SPRING_DATASOURCE_USERNAME:empleados}
+    password: ${SPRING_DATASOURCE_PASSWORD:empleados}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true
+
+app:
+  security:
+    username: ${APP_BASIC_AUTH_USER:admin}
+    password: ${APP_BASIC_AUTH_PASSWORD:change-me}
+
+logging:
+  level:
+    root: INFO
+    org.springframework.security: INFO
+    com.crudempleados: INFO
+
+springdoc:
+  swagger-ui:
+    enabled: ${SWAGGER_UI_ENABLED:true}

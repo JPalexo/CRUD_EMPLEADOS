@@ -90,6 +90,14 @@
 - **FR-004**: System MUST [data requirement, e.g., "persist user preferences"]
 - **FR-005**: System MUST [behavior, e.g., "log all security events"]
 
+### Technical Constraints *(mandatory)*
+
+- **TC-001**: Backend implementation MUST use Spring Boot 3 with Java 17.
+- **TC-002**: Protected endpoints MUST enforce HTTP Basic Authentication.
+- **TC-003**: Persistent data MUST be stored in PostgreSQL with versioned migrations.
+- **TC-004**: Feature MUST run in Docker-based local environment.
+- **TC-005**: Any API contract change MUST update OpenAPI/Swagger documentation.
+
 *Example of marking unclear requirements:*
 
 - **FR-006**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
@@ -113,3 +121,5 @@
 - **SC-002**: [Measurable metric, e.g., "System handles 1000 concurrent users without degradation"]
 - **SC-003**: [User satisfaction metric, e.g., "90% of users successfully complete primary task on first attempt"]
 - **SC-004**: [Business metric, e.g., "Reduce support tickets related to [X] by 50%"]
+- **SC-005**: 100% of protected endpoints reject unauthenticated requests.
+- **SC-006**: 100% of new/changed endpoints are visible and accurate in Swagger UI.
